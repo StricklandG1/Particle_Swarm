@@ -1,6 +1,6 @@
 #include "functions.h"
 
-const int SMALL_SET = 10;
+const int SMALL_SET = 5;
 
 int main()
 {
@@ -16,6 +16,7 @@ int main()
 		for (int j = 0; j < len; ++j)
 		{
 			temp.x[j] = distr(eng);
+			temp.x_best[j] = temp.x[j];
 		}
 		p.push_back(temp);
 	}
@@ -27,11 +28,11 @@ int main()
 		std::cout << std::endl;
 	}
 	std::cout << std::endl;
-	particle_swarm_optimization(func, p, 30);
+	particle_swarm_optimization(func, p, 10, 0.1, 0.25, 2);
 
 	for (size_t i = 0; i < len; ++i)
 	{
-		std::cout << p[i].x_best;
+		std::cout << p[i].x;
 		std::cout << std::endl;
 	}
 

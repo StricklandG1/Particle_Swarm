@@ -11,7 +11,7 @@ void particle_swarm_optimization(double(*f)(const std::vector<double>&),
 	int n = population[0].x.size();
 	std::random_device rd;
 	std::mt19937 eng(rd());
-	std::uniform_int_distribution<> distr(0, n - 1);
+	std::uniform_int_distribution<> distr(0, n);
 	std::vector<double> x_best = population[0].x_best;
 	double y_best = DBL_MAX;
 
@@ -55,9 +55,15 @@ double func(const std::vector<double>& vec)
 	double result = 0.0;
 	for (size_t i = 0; i < len; ++i)
 	{
-		result += vec[i];
+		result += pow(vec[i],2);
 	}
 	return result;
+}
+
+double wheeler_ridge(const std::vector<double>& vec)
+{
+	double temp = -pow((vec[0] * vec[1] - 1.5), 2) - pow((vec[1] - 1.5), 2);
+	return -pow(2.71828, temp);
 }
 
 std::vector<double> operator-(const std::vector<double>& lhs, const std::vector<double>& rhs)

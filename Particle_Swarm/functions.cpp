@@ -11,7 +11,7 @@ void particle_swarm_optimization(double(*f)(const std::vector<double>&),
 	int n = population[0].x.size();
 	std::random_device rd;
 	std::mt19937 eng(rd());
-	std::uniform_int_distribution<> distr(0, n);
+	std::uniform_int_distribution<> distr(0, 1.0);
 	std::vector<double> x_best = population[0].x_best;
 	double y_best = DBL_MAX;
 
@@ -29,21 +29,24 @@ void particle_swarm_optimization(double(*f)(const std::vector<double>&),
 	{
 		for (int j = 0; j < len; ++j)
 		{
-			double r1, r2 = 0.0;
-			r1 = distr(eng);
-			r2 = distr(eng);
-			population[j].x += population[j].v;
-			population[j].v = w * population[j].v + c1 * r1 * (population[j].x_best - population[j].x)
-												  + c2 * r2 * (x_best - population[j].x);
+			for (int k = 0; k < n; ++k)
+			{
+				double r1, r2 = 0.0;
+				r1 = distr(eng);
+				r2 = distr(eng);
+				population[j].v[k] = w * population[j].v[k] + c1 * r1 * (population[j].x_best[k] - population[j].x[k])
+													  + c2 * r2 * (x_best[k] - population[j].x[k]);
+				population[j].x[k] += population[j].v[k];
+			}
 			double y = f(population[j].x);
 			if (y < y_best)
 			{
 				x_best = population[j].x;
 				y_best = y;
-			}
-			if (y < f(population[j].x_best))
-			{
-				population[j].x_best = population[j].x;
+				if (y < f(population[j].x_best))
+				{
+					population[j].x_best = population[j].x;
+				}
 			}
 		}
 	}
@@ -66,58 +69,39 @@ double wheeler_ridge(const std::vector<double>& vec)
 	return -pow(2.71828, temp);
 }
 
-std::vector<double> operator-(const std::vector<double>& lhs, const std::vector<double>& rhs)
+// initializes particles to random values
+void randomize(std::vector<particle>& p)
 {
-	size_t len = lhs.size();
-	std::vector<double> result(len);
-	for (size_t i = 0; i < len; ++i)
-	{
-		result[i] = lhs[i] - rhs[i];
-	}
-	return result;
-}
+	std::random_device rd;
+	std::mt19937 eng(rd());
+	std::uniform_real_distribution<> distr(-10.0, 10.0);
+	std::uniform_real_distribution<> distr2(-20.0, 20.0);
 
-std::vector<double> operator+(const std::vector<double>& lhs, const std::vector<double>& rhs)
-{
-	size_t len = lhs.size();
-	std::vector<double> result(len);
-	for (size_t i = 0; i < len; ++i)
-	{
-		result[i] = lhs[i] + rhs[i];
-	}
-	return result;
-}
-
-std::vector<double> operator+(double lhs, const std::vector<double>& rhs)
-{
-	size_t len = rhs.size();
-	std::vector<double> result(len);
-	for (size_t i = 0; i < len; ++i)
-	{
-		result[i] = lhs + rhs[i];
-	}
-	return result;
-}
-
-
-std::vector<double> operator*(double lhs, const std::vector<double>& rhs)
-{
-	size_t len = rhs.size();
-	std::vector<double> result(len);
-	for (size_t i = 0; i < len; ++i)
-	{
-		result[i] = lhs * rhs[i];
-	}
-	return result;
-}
-
-void operator+=(std::vector<double>& lhs, const std::vector<double>& rhs)
-{
-	size_t len = lhs.size();
+	size_t len = p.size();
 	for (int i = 0; i < len; ++i)
 	{
-		lhs[i] += rhs[i];
+		particle temp;
+		size_t len = temp.x.size();
+		for (int j = 0; j < len; ++j)
+		{
+			temp.x[j] = distr(eng);
+			temp.x_best[j] = temp.x[j];
+			temp.v[j] = distr2(eng);
+		}
+		p[i] = temp;
 	}
+}
+
+// for printing the x coords of the population
+void print_pop(const std::vector<particle>& p)
+{
+	size_t len = p.size();
+	for (size_t i = 0; i < len; ++i)
+	{
+		std::cout << p[i].x;
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& out, const std::vector<double>& rhs)

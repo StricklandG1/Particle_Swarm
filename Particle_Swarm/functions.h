@@ -10,7 +10,7 @@ const int DIMENSIONS = 2;
 struct particle
 {
 	std::vector<double> x = std::vector<double>(DIMENSIONS);
-	std::vector<double> v = std::vector<double>(DIMENSIONS, 1.0);
+	std::vector<double> v = std::vector<double>(DIMENSIONS);
 	std::vector<double> x_best = std::vector<double>(DIMENSIONS);
 };
 
@@ -24,12 +24,9 @@ void particle_swarm_optimization(double(*f)(const std::vector<double>&),
 double func(const std::vector<double>& vec);
 double wheeler_ridge(const std::vector<double>& vec);
 
-std::vector<double> operator-(const std::vector<double>& lhs, const std::vector<double>& rhs);
-std::vector<double> operator+(const std::vector<double>& lhs, const std::vector<double>& rhs);
-std::vector<double> operator+(double lhs, const std::vector<double>& rhs);
-std::vector<double> operator*(double lhs, const std::vector<double>& rhs);
+void randomize(std::vector<particle>& p);
 
-void operator+=(std::vector<double>& lhs, const std::vector<double>& rhs);
+void print_pop(const std::vector<particle>& p);
 
 std::ostream& operator<<(std::ostream& out, const std::vector<double>& rhs);
 

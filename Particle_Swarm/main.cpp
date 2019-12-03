@@ -4,37 +4,14 @@ const int SMALL_SET = 5;
 
 int main()
 {
-	std::random_device rd;
-	std::mt19937 eng(rd());
-	std::uniform_real_distribution<> distr(-10.0, 10.0);
+	std::vector<particle> p(SMALL_SET);
+	randomize(p);
 
-	std::vector<particle> p;
-	for (int i = 0; i < SMALL_SET; ++i)
-	{
-		particle temp;
-		size_t len = temp.x.size();
-		for (int j = 0; j < len; ++j)
-		{
-			temp.x[j] = distr(eng);
-			temp.x_best[j] = temp.x[j];
-		}
-		p.push_back(temp);
-	}
+	print_pop(p);
 
-	size_t len = p.size();
-	for (size_t i = 0; i < len; ++i)
-	{
-		std::cout << p[i].x;
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-	particle_swarm_optimization(func, p, 10, 0.1, 0.25, 2);
+	particle_swarm_optimization(func, p, 10, 0.1, 0.5, 1);
 
-	for (size_t i = 0; i < len; ++i)
-	{
-		std::cout << p[i].x;
-		std::cout << std::endl;
-	}
+	print_pop(p);
 
 	std::cout << std::endl;
 	system("pause");

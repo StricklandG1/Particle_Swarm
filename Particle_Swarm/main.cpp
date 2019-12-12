@@ -1,6 +1,6 @@
 #include "functions.h"
 
-const int SMALL_SET = 5;
+const int SMALL_SET = 10;
 
 int main()
 {
@@ -9,7 +9,7 @@ int main()
 
 	print_pop(p);
 
-	particle_swarm_optimization(func, p, 10, 0.1, 0.5, 1);
+	particle_swarm_optimization(func, p, 100, 0.1, 0.5, 2);
 
 	print_pop(p);
 

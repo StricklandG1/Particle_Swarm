@@ -11,7 +11,7 @@ void particle_swarm_optimization(double(*f)(const std::vector<double>&),
 	int n = population[0].x.size();
 	std::random_device rd;
 	std::mt19937 eng(rd());
-	std::uniform_int_distribution<> distr(0, 1.0);
+	std::uniform_real_distribution<> distr(0, 1.0);
 	std::vector<double> x_best = population[0].x_best;
 	double y_best = DBL_MAX;
 
@@ -58,7 +58,7 @@ double func(const std::vector<double>& vec)
 	double result = 0.0;
 	for (size_t i = 0; i < len; ++i)
 	{
-		result += pow(vec[i],2);
+		result += pow(vec[i], 2);
 	}
 	return result;
 }
@@ -74,15 +74,15 @@ void randomize(std::vector<particle>& p)
 {
 	std::random_device rd;
 	std::mt19937 eng(rd());
-	std::uniform_real_distribution<> distr(-10.0, 10.0);
-	std::uniform_real_distribution<> distr2(-20.0, 20.0);
+	std::uniform_real_distribution<> distr(0.0, 10.0);
+	std::uniform_real_distribution<> distr2(10.0, 20.0);
 
 	size_t len = p.size();
 	for (int i = 0; i < len; ++i)
 	{
 		particle temp;
-		size_t len = temp.x.size();
-		for (int j = 0; j < len; ++j)
+		size_t len2 = temp.x.size();
+		for (int j = 0; j < len2; ++j)
 		{
 			temp.x[j] = distr(eng);
 			temp.x_best[j] = temp.x[j];
